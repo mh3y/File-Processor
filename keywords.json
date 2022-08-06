@@ -1,0 +1,21 @@
+[
+
+    {
+        "Keyword": "query",
+        "whitelist": "W-1"
+
+    },
+
+
+    {
+        "Keyword": "operation"
+
+    },
+
+
+    {
+        "Keyword": "identified"
+
+    }
+
+]

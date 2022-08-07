@@ -2,13 +2,14 @@
 
     {
         "Keyword": "query",
-        "whitelist_parent_path": "W-1"
+        "whitelist_parent_path": ["W-1", "W-2"]
 
     },
 
 
     {
-        "Keyword": "operation"
+        "Keyword": "operation",
+        "whitelist_parent_path": []
 
     },
 

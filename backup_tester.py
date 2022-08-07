@@ -51,7 +51,7 @@ def main():
     for file_path in getlistofsqlfiles(dirName='//Users//mh3y//Documents//vscode//SQL_Processor//SQL_Scripts'):
         list_of_words_found_for_this_file = []  # creating a list
         for words in keywords_json:  # for loop to iterate through keywords_json for "words"
-            #  print(words)
+            print(words)
             with open(file_path) as file:
                 contents = file.read()
                 search_word = words["Keyword"]

@@ -57,8 +57,6 @@ def main():
                 search_word = words["Keyword"]
             if "whitelist" in words:
                 print("whitelist exists")
-            else:
-                continue
 
                 if file_path == words["whitelist"]:
                     continue

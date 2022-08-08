@@ -1,21 +1,21 @@
 import os
 import json
+import argparse
 
 
 def getlistofsqlfiles(dirName):
     sql_container = []  # Opening an empty list named sql_container
-    for root, dirs, files in os.walk(dirName): #TODO: tell michael about this
-                                               # (don't hard code the path when the path is passed in as parameter)
+    for root, dirs, files in os.walk(dirName):  # TODO: tell michael about this
+        # (don't hard code the path when the path is passed in as parameter)
 
         for file in files:  #
-            if file.endswith(".sql"):   # If statement filtering for only files ending with .sql
+            if file.endswith(".sql"):  # If statement filtering for only files ending with .sql
                 sql_container.append(os.path.join(root, file))  # Appending results from if statement for ____
-                                                                # into empty sql_container list
-    return sql_container    #
+                # into empty sql_container list
+    return sql_container  #
 
 
-def main():
-    dirName = r'//Users//mh3y//Documents//vscode//SQL_Processor//SQL_Scripts'
+def blacklist_processor(dirName):
 
     keywords_file = open("keywords.json")  # opening the JSON
     keywords_json = json.load(keywords_file)  # converting JSON file into an object
@@ -72,6 +72,16 @@ def main():
 
     print('total forbidden files: {}'.format(len(sql_files_json)))
     print(sql_files_json)
+
+
+def main():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("dirName")
+    args = parser.parse_args()
+
+    blacklist_processor(args.dirName)
+    # dirName = r'//Users//mh3y//Documents//vscode//SQL_Processor//SQL_Scripts'
 
 
 if __name__ == '__main__':

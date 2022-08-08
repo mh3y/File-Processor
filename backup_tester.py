@@ -4,7 +4,8 @@ import json
 
 def getlistofsqlfiles(dirName):
     sql_container = []
-    for root, dirs, files in os.walk(dirName): #TODO: tell michael about this (don't hard code the path when the path is passed in as parameter)
+    for root, dirs, files in os.walk(dirName):  # TODO: tell michael about this
+        # (don't hard code the path when the path is passed in as parameter)
         for file in files:
             if file.endswith(".sql"):
                 sql_container.append(os.path.join(root, file))
@@ -12,7 +13,7 @@ def getlistofsqlfiles(dirName):
 
 
 def main():
-    dirName = r'D:\temp_michael\File-Processor\SQL_Scripts' #'//Users//mh3y//Documents//vscode//SQL_Processor//SQL_Scripts'
+    dirName = r'//Users//mh3y//Documents//vscode//SQL_Processor//SQL_Scripts'
 
     keywords_file = open("keywords.json")  # opening the JSON
     keywords_json = json.load(keywords_file)  # converting JSON file into an object
@@ -21,7 +22,7 @@ def main():
     sql_files_json = []  # creating a list
     i = 0
     for file_path in getlistofsqlfiles(dirName):
-        print('**doing this file: {}'.format(file_path))
+        # print('**doing this file: {}'.format(file_path))
         sql_filename = os.path.split(file_path)[1]
         sql_parent_path = os.path.split(os.path.split(file_path)[0])[1]
         with open(file_path) as file:
@@ -30,18 +31,31 @@ def main():
         list_of_words_found_for_this_file = []  # creating a list
         for words in keywords_json:  # for loop to iterate through keywords_json for "words"
 
-            def get_whitelist_parent_path(keyword):
+            # whitelist_counter_in_dict = keywords_json.count("whitelist_parent_path")
+            # from collections import Counter
+            # counts = Counter(keywords_json)
+            # whitelist_counter_in_dict_a = counts("whitelist_counter_in_dict")
+            # print(whitelist_counter_in_dict_a)
+
+            def get_whitelist_parent_path(keyword):  # creates a function that
                 if "whitelist_parent_path" in keyword:
                     return keyword["whitelist_parent_path"]
                 else:
                     return None
+
+            # if "whitelist_parent_path" in keywords_json:
+            #     whitelist_counter_in_dict = keywords_json.count("whitelist_parent_path")
+            #     from collections import Counter
+            #     counts = Counter(keywords_json)
+            #     whitelist_counter_in_dict_a = counts("whitelist_counter_in_dict")
+            #     print(count whitelist_counter_in_dict_a)
 
             def is_keyword_in_file(keyword, file_content):
                 return keyword in file_content
 
             def is_whitelisted(keyword_dict, parent_path, keyword):
                 whitelist_parent_path = get_whitelist_parent_path(keyword_dict)
-                if parent_path == whitelist_parent_path and keyword == keyword_dict["Keyword"]:
+                if parent_path in whitelist_parent_path and keyword == keyword_dict["Keyword"]:
                     return True  # in other words, it is TRUE that the parent path is whitelisted
                 else:
                     return False
@@ -52,7 +66,8 @@ def main():
             # if keyword_found:
             #     print('** this file {} contains keyword {}'.format(sql_filename, search_word))
             # if qualifies_for_white_listing:
-            #     print('** this file {} can be whitelisted if it contains keyword {}, as it is in parent_path {}'.format(sql_filename, search_word, sql_parent_path))
+            #     print('** this file {} can be whitelisted if it contains keyword {},
+            #           as it is in parent_path {}'.format(sql_filename, search_word, sql_parent_path))
 
             if keyword_found and not qualifies_for_white_listing:
                 # print('** this file {} is blacklisted for containing keyword {}'.format(
@@ -67,7 +82,7 @@ def main():
         if i == 200:
             break
 
-    print('total forbidden files: {}'.format(len(sql_files_json)))
+    # print('total forbidden files: {}'.format(len(sql_files_json)))
     print(sql_files_json)
 
 

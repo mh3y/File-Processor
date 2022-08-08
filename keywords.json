@@ -2,7 +2,7 @@
 
     {
         "Keyword": "query",
-        "whitelist_parent_path": ["W-1", "W-2"]
+        "whitelist_parent_path": ["W-1","W-2"]
 
     },
 

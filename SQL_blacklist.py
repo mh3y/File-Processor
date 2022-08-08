@@ -1,18 +1,21 @@
 import os
 import json
+import argparse
 
 
 def getlistofsqlfiles(dirName):
-    sql_container = []
-    for root, dirs, files in os.walk(dirName): #TODO: tell michael about this (don't hard code the path when the path is passed in as parameter)
-        for file in files:
-            if file.endswith(".sql"):
-                sql_container.append(os.path.join(root, file))
-    return sql_container
+    sql_container = []  # Opening an empty list named sql_container
+    for root, dirs, files in os.walk(dirName):  # TODO: tell michael about this
+        # (don't hard code the path when the path is passed in as parameter)
+
+        for file in files:  #
+            if file.endswith(".sql"):  # If statement filtering for only files ending with .sql
+                sql_container.append(os.path.join(root, file))  # Appending results from if statement for ____
+                # into empty sql_container list
+    return sql_container  #
 
 
-def main():
-    dirName = r'//Users//mh3y//Documents//vscode//SQL_Processor//SQL_Scripts'
+def blacklist_processor(dirName):
 
     keywords_file = open("keywords.json")  # opening the JSON
     keywords_json = json.load(keywords_file)  # converting JSON file into an object
@@ -21,7 +24,6 @@ def main():
     sql_files_json = []  # creating a list
     i = 0
     for file_path in getlistofsqlfiles(dirName):
-        print('**doing this file: {}'.format(file_path))
         sql_filename = os.path.split(file_path)[1]
         sql_parent_path = os.path.split(os.path.split(file_path)[0])[1]
         with open(file_path) as file:
@@ -34,14 +36,14 @@ def main():
                 if "whitelist_parent_path" in keyword:
                     return keyword["whitelist_parent_path"]
                 else:
-                    return None
+                    return []
 
             def is_keyword_in_file(keyword, file_content):
                 return keyword in file_content
 
             def is_whitelisted(keyword_dict, parent_path, keyword):
                 whitelist_parent_path = get_whitelist_parent_path(keyword_dict)
-                if parent_path == whitelist_parent_path and keyword == keyword_dict["Keyword"]:
+                if parent_path in whitelist_parent_path and keyword == keyword_dict["Keyword"]:
                     return True  # in other words, it is TRUE that the parent path is whitelisted
                 else:
                     return False
@@ -52,7 +54,8 @@ def main():
             # if keyword_found:
             #     print('** this file {} contains keyword {}'.format(sql_filename, search_word))
             # if qualifies_for_white_listing:
-            #     print('** this file {} can be whitelisted if it contains keyword {}, as it is in parent_path {}'.format(sql_filename, search_word, sql_parent_path))
+            #     print('** this file {} can be whitelisted if it contains keyword {},
+            #           as it is in parent_path {}'.format(sql_filename, search_word, sql_parent_path))
 
             if keyword_found and not qualifies_for_white_listing:
                 # print('** this file {} is blacklisted for containing keyword {}'.format(
@@ -67,8 +70,26 @@ def main():
         if i == 200:
             break
 
+    return sql_files_json
+
+def pretty_print(json_result):
+    return 'TODO: makethiswork'
+
+def main():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("dirName")
+    args = parser.parse_args()
+
+    sql_files_json = blacklist_processor(args.dirName)
     print('total forbidden files: {}'.format(len(sql_files_json)))
     print(sql_files_json)
+
+    # total forbidden files: xxx
+    # --------------------------
+    # file_data1.sql in W-1 is blacklisted for having keywords 'operation' and 'blabla'
+    # file_data2.sql in W-9 is blacklisted for having keywords 'query' and 'blabla'
+
 
 
 if __name__ == '__main__':

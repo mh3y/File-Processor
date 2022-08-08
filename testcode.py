@@ -70,9 +70,10 @@ def blacklist_processor(dirName):
         if i == 200:
             break
 
-    print('total forbidden files: {}'.format(len(sql_files_json)))
-    print(sql_files_json)
+    return sql_files_json
 
+def pretty_print(json_result):
+    return 'TODO: makethiswork'
 
 def main():
 
@@ -80,8 +81,15 @@ def main():
     parser.add_argument("dirName")
     args = parser.parse_args()
 
-    blacklist_processor(args.dirName)
-    # dirName = r'//Users//mh3y//Documents//vscode//SQL_Processor//SQL_Scripts'
+    sql_files_json = blacklist_processor(args.dirName)
+    print('total forbidden files: {}'.format(len(sql_files_json)))
+    print(sql_files_json)
+
+    # total forbidden files: xxx
+    # --------------------------
+    # file_data1.sql in W-1 is blacklisted for having keywords 'operation' and 'blabla'
+    # file_data2.sql in W-9 is blacklisted for having keywords 'query' and 'blabla'
+
 
 
 if __name__ == '__main__':

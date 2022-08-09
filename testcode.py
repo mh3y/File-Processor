@@ -16,7 +16,6 @@ def getlistofsqlfiles(dirName):
 
 
 def blacklist_processor(dirName):
-
     keywords_file = open("keywords.json")  # opening the JSON
     keywords_json = json.load(keywords_file)  # converting JSON file into an object
     keywords_file.close()  # closing the file
@@ -72,11 +71,13 @@ def blacklist_processor(dirName):
 
     return sql_files_json
 
-def pretty_print(json_result):
-    return 'TODO: makethiswork'
+
+def pretty_print(sql_files_json):
+    print('total forbidden files: {}'.format(len(sql_files_json)))
+    print(sql_files_json)
+
 
 def main():
-
     parser = argparse.ArgumentParser()
     parser.add_argument("dirName")
     args = parser.parse_args()
@@ -89,7 +90,6 @@ def main():
     # --------------------------
     # file_data1.sql in W-1 is blacklisted for having keywords 'operation' and 'blabla'
     # file_data2.sql in W-9 is blacklisted for having keywords 'query' and 'blabla'
-
 
 
 if __name__ == '__main__':

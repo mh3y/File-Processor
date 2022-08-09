@@ -36,8 +36,8 @@ def blacklist_processor(dirName):
                 else:
                     return []
 
-            def is_keyword_in_file(keyword, file_content):
-                return keyword in file_content
+            # def is_keyword_in_file(keyword, file_content):
+            #     return keyword in file_content
 
             def is_whitelisted(keyword_dict, parent_path, json_dict):
                 whitelist_parent_path = get_whitelist_parent_path(keyword_dict)
@@ -47,7 +47,8 @@ def blacklist_processor(dirName):
                     return False
 
             search_word = words["Keyword"]
-            keyword_found = is_keyword_in_file(search_word, contents)
+            keyword_found = search_word in contents
+            # keyword_found = is_keyword_in_file(search_word, contents)
             qualifies_for_white_listing = is_whitelisted(words, sql_parent_path, search_word)
 
             if keyword_found and not qualifies_for_white_listing:

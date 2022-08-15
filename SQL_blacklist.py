@@ -70,9 +70,8 @@ def pretty_print(sql_files_json):
     for file in sql_files_json:
         parent_path = file["parent_path"]
         sql_filename = file["filename"]
-        new_txt_filename = sql_filename.replace("sql","txt")
         search_word = ' and '.join(file["keyword"])
-        print("{} in {} is blacklisted for having keywords '{}'".format(new_txt_filename, parent_path, search_word))
+        print("{} in {} is blacklisted for having keywords '{}'".format(sql_filename, parent_path, search_word))
     return pretty_print
 
 

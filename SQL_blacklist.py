@@ -74,17 +74,6 @@ def pretty_print(sql_files_json):
     return pretty_print
 
 
-# def change_to_txt(sql_files_json):
-#     for sql_file in sql_files_json:
-#         if sql_file["sql_filename"].endswith(".sql"):
-#         # sql_filename.rename(sql_filename.with_suffix('.txt'))
-
-
-# def change_to_txt(sql_container):
-#     for file in sql_container:
-#         # if sql_container.endswith(".sql"):
-#         file.rename(file.with_suffix('.txt'))
-
 def change_to_txt(sql_files_json):
     for file in sql_files_json:
         file_path = file['fullpath']
@@ -92,7 +81,7 @@ def change_to_txt(sql_files_json):
         new_file_path = file_path.replace('.sql', '.txt')
         os.rename(file_path, new_file_path)
 
-#
+
 # def change_to_sql(dirName):
 #     for root, dirs, files in os.walk(dirName):
 #         for file in files:
@@ -103,13 +92,18 @@ def change_to_txt(sql_files_json):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("dirName")
+    parser.add_argument("--rename", action='store_true')
+    parser.add_argument("--print", action='store_true')
+    parser.add_argument("--dirName", type=str, required=True)
     args = parser.parse_args()
 
     sql_files_json = blacklist_processor(args.dirName)
-    pretty_print(sql_files_json)
-    change_to_txt(sql_files_json)
-    # change_to_sql(args.dirName)
+
+    if args.print:
+        pretty_print(sql_files_json)
+    if args.rename:
+        change_to_txt(sql_files_json)
+        pretty_print(sql_files_json)
 
 
 if __name__ == '__main__':

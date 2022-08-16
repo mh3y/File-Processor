@@ -3,11 +3,10 @@ import json
 import argparse
 
 
-def getlistofsqlfiles(dirName):
+def get_list_of_sql_files(dirName):
     sql_container = []
     for root, dirs, files in os.walk(dirName):
-
-        for file in files:  #
+        for file in files:
             if file.endswith(".sql"):
                 sql_container.append(os.path.join(root, file))
 
@@ -21,7 +20,7 @@ def blacklist_processor(dirName):
 
     sql_files_json = []
     i = 0
-    for file_path in getlistofsqlfiles(dirName):
+    for file_path in get_list_of_sql_files(dirName):
         sql_filename = os.path.split(file_path)[1]
         sql_parent_path = os.path.split(os.path.split(file_path)[0])[1]
         with open(file_path) as file:
@@ -75,6 +74,33 @@ def pretty_print(sql_files_json):
     return pretty_print
 
 
+# def change_to_txt(sql_files_json):
+#     for sql_file in sql_files_json:
+#         if sql_file["sql_filename"].endswith(".sql"):
+#         # sql_filename.rename(sql_filename.with_suffix('.txt'))
+
+
+# def change_to_txt(sql_container):
+#     for file in sql_container:
+#         # if sql_container.endswith(".sql"):
+#         file.rename(file.with_suffix('.txt'))
+
+def change_to_txt(sql_files_json):
+    for file in sql_files_json:
+        file_path = file['fullpath']
+        # if file_path.endswith(".sql"):
+        new_file_path = file_path.replace('.sql', '.txt')
+        os.rename(file_path, new_file_path)
+
+#
+# def change_to_sql(dirName):
+#     for root, dirs, files in os.walk(dirName):
+#         for file in files:
+#             if file.endswith(".txt"):
+#                 oldName = os.path.join(root, file)
+#                 os.rename(oldName, oldName.replace('.txt', '.sql'))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("dirName")
@@ -82,6 +108,8 @@ def main():
 
     sql_files_json = blacklist_processor(args.dirName)
     pretty_print(sql_files_json)
+    change_to_txt(sql_files_json)
+    # change_to_sql(args.dirName)
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 import os
 import json
 import argparse
+import requests
 
 
 def get_list_of_sql_files(dirName):
@@ -90,10 +91,48 @@ def change_to_txt(sql_files_json):
 #                 os.rename(oldName, oldName.replace('.txt', '.sql'))
 
 
+def get_github_user(user_name):
+    url = 'https://api.github.com'
+    url_users = '/users/'
+    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
+    print('TODO: call {}{}{}'.format(url, url_users, user_name))
+    r = requests.get(url + url_users + user_name, headers=h)
+    print(r.json())
+    print('Status Code returned:{}'.format(r.status_code))
+    if r.status_code == 404:
+        print('Sadly the user {} does not exist, but may be a thousand years from now, he will be.'.format(user_name))
+
+
+def create_github_issue(user_name):
+    url = 'https://api.github.com'
+    url_repos = '/repos/{}/File-Processor/issues'.format(user_name)
+    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
+    new_issue = {
+    'owner': user_name,
+    'repo': "python-cli",
+    'title': "bougie-01",
+    'body': "smells like patchouli",
+    'assignees': [],
+    'milestone': None,
+    'labels': []
+    }
+    # print('TODO: call {}{}{}'.format(url, url_repos, user_name))
+    r = requests.post(url + url_repos, headers=h, data=json.dumps(new_issue))
+    # print(r.json())
+    # print('Status Code returned:{}'.format(r.status_code))
+    if r.status_code != 201:
+        print('error - status code is {}'.format(r.status_code))
+        # print('Sadly the user {} does not exist, but may be a thousand years from now, he will be.'.format(user_name))
+
+    # print('TODO: create a github issue for each blacklisted file for {}'.format(user_name))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--rename", action='store_true')
     parser.add_argument("--print", action='store_true')
+    parser.add_argument("--gituser", required=False)
+    parser.add_argument("--postissue", action='store_true', required=False)
     parser.add_argument("--dirName", type=str, required=True)
     args = parser.parse_args()
 
@@ -104,6 +143,10 @@ def main():
     if args.rename:
         change_to_txt(sql_files_json)
         pretty_print(sql_files_json)
+    if args.gituser:
+        get_github_user(args.gituser)
+    if args.postissue is True:
+        create_github_issue(args.gituser)
 
 
 if __name__ == '__main__':

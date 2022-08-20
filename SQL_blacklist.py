@@ -94,7 +94,7 @@ def change_to_txt(sql_files_json):
 def get_github_user(user_name):
     url = 'https://api.github.com'
     url_users = '/users/'
-    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
+    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
     print('TODO: call {}{}{}'.format(url, url_users, user_name))
     r = requests.get(url + url_users + user_name, headers=h)
     print(r.json())
@@ -106,17 +106,17 @@ def get_github_user(user_name):
 def create_github_issue(user_name):
     url = 'https://api.github.com'
     url_repos = '/repos/{}/File-Processor/issues'.format(user_name)
-    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
+    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
     new_issue = {
-    'owner': user_name,
-    'repo': "File-Processor",
-    'title': "bougie-01",
-    'body': "smells like patchouli",
-    'assignees': [],
-    'milestone': None,
-    'labels': []
+        'owner': user_name,
+        'repo': "File-Processor",
+        'title': "bougie-01",
+        'body': "smells like patchouli",
+        'assignees': [],
+        'milestone': None,
+        'labels': []
     }
-    print(new_issue)
+    # print(new_issue)
     # print('TODO: call {}{}{}'.format(url, url_repos, user_name))
     r = requests.post(url + url_repos, headers=h, data=json.dumps(new_issue))
     # print(r.json())
@@ -128,14 +128,30 @@ def create_github_issue(user_name):
     # print('TODO: create a github issue for each blacklisted file for {}'.format(user_name))
 
 
+def list_github_issues(user_name, repo_name):
+    url = 'https://api.github.com'
+    url_repos = '/repos/{}/{}/issues'.format(user_name, repo_name)
+    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
+    r = requests.get(url + url_repos, headers=h)
+    for i in r.json():
+        print(i["title"])
+
+
+
+
 def main():
+    github_repo_name = 'File-Processor'
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--rename", action='store_true')
     parser.add_argument("--print", action='store_true')
     parser.add_argument("--gituser", required=False)
-    parser.add_argument("--postissue", action='store_true', required=False)
+    parser.add_argument("--postissue", action='store_false', required=False)
+    parser.add_argument('--listissues', required=False, action='store_false')
     parser.add_argument("--dirName", type=str, required=True)
     args = parser.parse_args()
+
+    list_github_issues(user_name=args.gituser, repo_name=github_repo_name)
 
     sql_files_json = blacklist_processor(args.dirName)
 
@@ -144,10 +160,12 @@ def main():
     if args.rename:
         change_to_txt(sql_files_json)
         pretty_print(sql_files_json)
-    if args.gituser:
-        get_github_user(args.gituser)
+    # if args.gituser:
+    #     get_github_user(args.gituser)
     if args.postissue is True:
         create_github_issue(args.gituser)
+    if args.listissues is True:
+        list_github_issues(args.gituser)
 
 
 if __name__ == '__main__':

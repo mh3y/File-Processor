@@ -94,7 +94,7 @@ def change_to_txt(sql_files_json):
 def get_github_user(user_name):
     url = 'https://api.github.com'
     url_users = '/users/'
-    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
+    # h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
     print('TODO: call {}{}{}'.format(url, url_users, user_name))
     r = requests.get(url + url_users + user_name, headers=h)
     print(r.json())
@@ -103,39 +103,40 @@ def get_github_user(user_name):
         print('Sadly the user {} does not exist, but may be a thousand years from now, he will be.'.format(user_name))
 
 
-def create_github_issue(user_name, new_issue):
+def create_github_issue(header, user_name, new_issue):
     url = 'https://api.github.com'
     repo_name = 'File-Processor'
     url_repos = '/repos/{}/{}/issues'.format(user_name, repo_name)
-    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
-    # print(new_issue)
-    # print('TODO: call {}{}{}'.format(url, url_repos, user_name))
-    if is_github_issue_title_exists(new_issue['owner'], new_issue['repo'], new_issue['title']):
+    # h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
+
+    if is_github_issue_title_exists(header, new_issue['owner'], new_issue['repo'], new_issue['title']):
         return
     else:
-        r = requests.post(url + url_repos, headers=h, data=json.dumps(new_issue))
+        r = requests.post(url + url_repos, headers=header, data=json.dumps(new_issue))
     # print(r.json())
     # print('Status Code returned:{}'.format(r.status_code))
     if r.status_code != 201:
         print('error - status code is {}'.format(r.status_code))
 
 
-def get_github_issues(user_name, repo_name):
+def get_github_issues(header, user_name, repo_name):
     url = 'https://api.github.com'
     url_repos = '/repos/{}/{}/issues'.format(user_name, repo_name)
-    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
-    r = requests.get(url + url_repos, headers=h)
+    # h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
+    r = requests.get(url + url_repos, headers=header)
+    if r.status_code != 200:
+        raise Exception('Failed to get list of github issues, status_code:{}'.format(r.status_code))
     return r.json()
 
 
-def list_github_issues(user_name, repo_name):
-    issues = get_github_issues(user_name=user_name, repo_name=repo_name)
+def list_github_issues(header, user_name, repo_name):
+    issues = get_github_issues(header, user_name=user_name, repo_name=repo_name)
     for issue in issues:
         print('{}, {}, {}, {}'.format(issue['id'], issue['title'], issue['state'], issue['created_at']))
 
 
-def is_github_issue_title_exists(user_name, repo_name, issue_title):
-    issues = get_github_issues(user_name=user_name, repo_name=repo_name)
+def is_github_issue_title_exists(header, user_name, repo_name, issue_title):
+    issues = get_github_issues(header, user_name=user_name, repo_name=repo_name)
     filtered_issues = [issue for issue in issues if issue['title'] == issue_title]
     count_of_found_issues = len(filtered_issues)
     if count_of_found_issues > 0:
@@ -156,6 +157,8 @@ def main():
     parser.add_argument('--githubtoken')
     args = parser.parse_args()
 
+    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token {}'.format(args.githubtoken)}
+
     github_repo_name = 'File-Processor'
     test_issue = {
         'owner': args.gituser,
@@ -169,7 +172,7 @@ def main():
 
     sql_files_json = blacklist_processor(args.dirName)
 
-    print(args)
+    # print(args)
 
     if args.print:
         pretty_print(sql_files_json)
@@ -179,7 +182,7 @@ def main():
     # if args.gituser:
     #     get_github_user(args.gituser)
     if args.postissue is True:
-        create_github_issue(args.gituser, test_issue)
+        create_github_issue(h, args.gituser, test_issue)
     if args.listissues is True:
         list_github_issues(user_name=args.gituser, repo_name=github_repo_name)
     if args.isissueexists is True:

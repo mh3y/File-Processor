@@ -184,7 +184,7 @@ def main():
     if args.postissue is True:
         create_github_issue(h, args.gituser, test_issue)
     if args.listissues is True:
-        list_github_issues(user_name=args.gituser, repo_name=github_repo_name)
+        list_github_issues(h, user_name=args.gituser, repo_name=github_repo_name)
     if args.isissueexists is True:
         print(args.isissueexists)
 

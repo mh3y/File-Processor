@@ -106,16 +106,17 @@ def get_github_user(user_name):
 def create_github_issue(user_name):
     url = 'https://api.github.com'
     url_repos = '/repos/{}/File-Processor/issues'.format(user_name)
-    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
+    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
     new_issue = {
     'owner': user_name,
-    'repo': "python-cli",
+    'repo': "File-Processor",
     'title': "bougie-01",
     'body': "smells like patchouli",
     'assignees': [],
     'milestone': None,
     'labels': []
     }
+    print(new_issue)
     # print('TODO: call {}{}{}'.format(url, url_repos, user_name))
     r = requests.post(url + url_repos, headers=h, data=json.dumps(new_issue))
     # print(r.json())

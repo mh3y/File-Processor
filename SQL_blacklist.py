@@ -94,7 +94,7 @@ def change_to_txt(sql_files_json):
 def get_github_user(user_name):
     url = 'https://api.github.com'
     url_users = '/users/'
-    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
+    h = {'Accept': 'application/vnd.github+json', 'Authorization': 'token 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'}
     print('TODO: call {}{}{}'.format(url, url_users, user_name))
     r = requests.get(url + url_users + user_name, headers=h)
     print(r.json())

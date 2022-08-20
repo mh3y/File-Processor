@@ -153,6 +153,7 @@ def main():
     parser.add_argument('--listissues', required=False, action='store_true')
     parser.add_argument("--isissueexists", type=bool, required=False)
     parser.add_argument("--dirName", type=str, required=True)
+    parser.add_argument('--githubtoken')
     args = parser.parse_args()
 
     github_repo_name = 'File-Processor'
@@ -167,6 +168,8 @@ def main():
     }
 
     sql_files_json = blacklist_processor(args.dirName)
+
+    print(args)
 
     if args.print:
         pretty_print(sql_files_json)

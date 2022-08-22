@@ -75,12 +75,12 @@ def pretty_print(sql_files_json):
     return pretty_print
 
 
-def change_to_txt(sql_files_json):
-    for file in sql_files_json:
-        file_path = file['fullpath']
-        # if file_path.endswith(".sql"):
-        new_file_path = file_path.replace('.sql', '.txt')
-        os.rename(file_path, new_file_path)
+# def change_to_txt(sql_files_json):
+#     for file in sql_files_json:
+#         file_path = file['fullpath']
+#         # if file_path.endswith(".sql"):
+#         new_file_path = file_path.replace('.sql', '.txt')
+#         os.rename(file_path, new_file_path)
 
 
 # def change_to_sql(dirName):
@@ -151,7 +151,8 @@ def main():
     parser.add_argument("--print", action='store_true')
     parser.add_argument("--gituser", required=False)
     parser.add_argument("--postissue", action='store_true', required=False)
-    parser.add_argument('--listissues', required=False, action='store_true')
+    parser.add_argument("--testpostissue", required=False)
+    parser.add_argument('--listissues', action='store_true', required=False)
     parser.add_argument("--isissueexists", type=bool, required=False)
     parser.add_argument("--dirName", type=str, required=True)
     parser.add_argument('--githubtoken')

@@ -106,8 +106,6 @@ def create_github_issue_for_blacklist(sql_files_json, header, user_name, repo_na
         creating_issue = Github(header, user_name)
         creating_issue.create_github_issue(issue)
 
-        # create_github_issue(header, user_name, issue)
-
 
 def main():
 

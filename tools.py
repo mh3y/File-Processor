@@ -10,13 +10,11 @@ class Github:
     def get_github_user(self):
         url = 'https://api.github.com'
         url_users = '/users/'
-        print('TODO: call {}{}{}'.format(url, url_users, self.user_name))
         r = requests.get(url + url_users + self.user_name, headers=self.header)
-        print(r.json())
-        print('Status Code returned:{}'.format(r.status_code))
         if r.status_code == 404:
             print(
-                'Sadly the user {} does not exist, but may be a thousand years from now, he will be.'.format(user_name))
+                'Sadly the user {} does not exist, but may be a thousand years from now, he will be.'.
+                format(self.user_name))
 
     def get_github_issues(self, repo_name):
         url = 'https://api.github.com'

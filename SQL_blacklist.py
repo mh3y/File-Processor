@@ -187,7 +187,6 @@ def main():
     }
 
     sql_files_json = blacklist_processor(args.dirName)
-    print(sql_files_json)
 
     if args.print:
         pretty_print(sql_files_json)
@@ -196,7 +195,9 @@ def main():
         pretty_print(sql_files_json)
     # if args.gituser:
     #     get_github_user(args.gituser)
-    if args.postissue is True:
+    # if args.postissue is True:
+    #     create_github_issue(h, args.gituser, test_issue)
+    if args.testpostissue is True:
         create_github_issue(h, args.gituser, test_issue)
     if args.listissues is True:
         list_github_issues(h, user_name=args.gituser, repo_name=github_repo_name)

@@ -75,12 +75,12 @@ def pretty_print(sql_files_json):
     return pretty_print
 
 
-# def change_to_txt(sql_files_json):
-#     for file in sql_files_json:
-#         file_path = file['fullpath']
-#         # if file_path.endswith(".sql"):
-#         new_file_path = file_path.replace('.sql', '.txt')
-#         os.rename(file_path, new_file_path)
+def change_to_txt(sql_files_json):
+    for file in sql_files_json:
+        file_path = file['fullpath']
+        # if file_path.endswith(".sql"):
+        new_file_path = file_path.replace('.sql', '.txt')
+        os.rename(file_path, new_file_path)
 
 
 # def change_to_sql(dirName):
@@ -145,13 +145,28 @@ def is_github_issue_title_exists(header, user_name, repo_name, issue_title):
         return False
 
 
+def create_github_issue_for_blacklist(sql_files_json, header, user_name, repo_name):
+    for files in sql_files_json:
+        issue = {
+            'owner': user_name,
+            'repo': repo_name,
+            'title': files["filename"],
+            'body': "smells like patchouli",
+            'assignees': [],
+            'milestone': None,
+            'labels': []
+        }
+
+        create_github_issue(header, user_name, issue)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--rename", action='store_true')
     parser.add_argument("--print", action='store_true')
     parser.add_argument("--gituser", required=False)
     parser.add_argument("--postissue", action='store_true', required=False)
-    parser.add_argument("--testpostissue", required=False)
+    parser.add_argument("--testpostissue", action='store_true', required=False)
     parser.add_argument('--listissues', action='store_true', required=False)
     parser.add_argument("--isissueexists", type=bool, required=False)
     parser.add_argument("--dirName", type=str, required=True)
@@ -172,8 +187,7 @@ def main():
     }
 
     sql_files_json = blacklist_processor(args.dirName)
-
-    # print(args)
+    print(sql_files_json)
 
     if args.print:
         pretty_print(sql_files_json)
@@ -188,6 +202,8 @@ def main():
         list_github_issues(h, user_name=args.gituser, repo_name=github_repo_name)
     if args.isissueexists is True:
         print(args.isissueexists)
+
+    create_github_issue_for_blacklist(sql_files_json, h, args.gituser, github_repo_name)
 
 
 if __name__ == '__main__':

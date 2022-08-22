@@ -4,12 +4,12 @@ class House:
         self.windows = windows
         self.pools = pools
 
-    # def market_value(self):
-    #     market_value = (self.doors * 12) + (self.windows * 71) + (self.pools * 300)
-    #     return market_value
-
     def market_value(self):
-        return ((12 * self.doors) + (71 * self.windows) + (300 * self.pools)) * global_meh_factor
+        market_value = (self.doors * 12) + (self.windows * 71) + (self.pools * 300)
+        return market_value
+
+    # def market_value(self):
+    #     return ((12 * self.doors) + (71 * self.windows) + (300 * self.pools)) * global_meh_factor
 
     def description(self):
         return 'This house has {} doors, {} windows and {} pools with a market value of {}'.format(self.doors,

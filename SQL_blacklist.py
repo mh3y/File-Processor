@@ -92,6 +92,9 @@ def change_to_txt(sql_files_json):
 
 
 def create_github_issue_for_blacklist(sql_files_json, header, user_name, repo_name):
+
+    github_object = Github(header, user_name)
+
     for files in sql_files_json:
         issue = {
             'owner': user_name,
@@ -103,8 +106,7 @@ def create_github_issue_for_blacklist(sql_files_json, header, user_name, repo_na
             'labels': []
         }
 
-        creating_issue = Github(header, user_name)
-        creating_issue.create_github_issue(issue)
+        github_object.create_github_issue(issue)
 
 
 def main():

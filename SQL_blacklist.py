@@ -2,6 +2,8 @@ import os
 import json
 import argparse
 from tools import Github
+import discord
+from dotenv import load_dotenv
 
 
 def get_list_of_sql_files(dirName):
@@ -92,7 +94,6 @@ def change_to_txt(sql_files_json):
 
 
 def create_github_issue_for_blacklist(sql_files_json, header, user_name, repo_name):
-
     github_object = Github(header, user_name)
 
     for files in sql_files_json:
@@ -109,8 +110,29 @@ def create_github_issue_for_blacklist(sql_files_json, header, user_name, repo_na
         github_object.create_github_issue(issue)
 
 
-def main():
+load_dotenv()
+TOKEN = os.getenv('DISCORD_TOKEN')
+GUILD = os.getenv('DISCORD_GUILD')
 
+client = discord.Client()
+
+
+@client.event
+async def on_ready():
+    for guild in client.guilds:
+        if guild.name == GUILD:
+            break
+
+    print(
+        f'{client.user} is connected to the following guild:\n'
+        f'{guild.name}(id: {guild.id})'
+    )
+
+
+client.run(TOKEN)
+
+
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--rename", action='store_true')
     parser.add_argument("--print", action='store_true')
